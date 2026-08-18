@@ -1,0 +1,84 @@
+.footer {
+  position: relative;
+  padding-top: calc(40 * var(--u));
+  padding-bottom: calc(24 * var(--u));
+  text-align: center;
+}
+
+.flourish {
+  width: calc(134 * var(--u));
+  height: auto;
+  margin: 0 auto;
+}
+
+.flourishTop {
+  transform: rotate(180deg);
+}
+
+.label {
+  margin: calc(26 * var(--u)) 0 0;
+  font-size: calc(21 * var(--u));
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+}
+
+.hosts {
+  --bleed-w: calc(352 * var(--u));
+  margin: calc(6 * var(--u)) auto 0;
+  font-size: calc(40 * var(--u));
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+.parents {
+  margin: calc(4 * var(--u)) 0 0;
+  color: var(--gold-deep);
+  font-size: calc(15 * var(--u));
+  line-height: 1.7;
+  letter-spacing: 0.08em;
+}
+
+.flourishBottom {
+  margin-top: calc(22 * var(--u));
+}
+
+.blessingBlock {
+  position: relative;
+  margin-top: calc(30 * var(--u));
+}
+
+.ring {
+  position: absolute;
+  top: calc(26 * var(--u));
+  left: 50%;
+  width: calc(196 * var(--u));
+  height: auto;
+  transform: translateX(-50%);
+  opacity: 0.3;
+  animation: spin 20s linear infinite;
+  pointer-events: none;
+}
+
+.wash {
+  --bleed-w: calc(333 * var(--u));
+  position: relative;
+  width: min(var(--bleed-w), calc(100vw - 8 * var(--u)));
+  height: auto;
+  margin: 0 auto;
+}
+
+.blessing {
+  --bleed-w: calc(330 * var(--u));
+  position: relative;
+  margin: calc(-46 * var(--u)) auto 0;
+  color: #3b3226;
+  font-size: calc(26 * var(--u));
+  line-height: 1.55;
+}
+
+.credit {
+  margin: calc(34 * var(--u)) 0 0;
+  color: rgba(0, 0, 0, 0.35);
+  font-size: calc(12 * var(--u));
+  letter-spacing: 0.14em;
+}

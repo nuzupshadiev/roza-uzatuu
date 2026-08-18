@@ -1,0 +1,86 @@
+.section {
+  position: relative;
+  padding-top: calc(10 * var(--u));
+  text-align: center;
+}
+
+.label {
+  margin: 0;
+  font-size: calc(33 * var(--u));
+  line-height: 1.9;
+  letter-spacing: 0.08em;
+}
+
+.card {
+  --bleed-w: calc(351 * var(--u));
+  position: relative;
+  margin: calc(16 * var(--u)) auto 0;
+  padding: calc(18 * var(--u)) calc(14 * var(--u)) calc(20 * var(--u));
+  border-radius: calc(26 * var(--u));
+  background: linear-gradient(var(--cream), var(--cream)) padding-box,
+    linear-gradient(150deg, #c8b78e, #e6dcbd 45%, #b6a377) border-box;
+  border: calc(1.5 * var(--u)) solid transparent;
+}
+
+.month {
+  margin: 0 0 calc(10 * var(--u));
+  color: var(--gold);
+  font-weight: 300;
+  font-size: calc(30 * var(--u));
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.weekdays {
+  border-radius: calc(20 * var(--u));
+  background: var(--gold);
+  color: var(--paper);
+  font-size: calc(13 * var(--u));
+  line-height: calc(27 * var(--u));
+  font-weight: 400;
+}
+
+.days {
+  margin-top: calc(6 * var(--u));
+  row-gap: calc(4 * var(--u));
+  color: var(--ink);
+  font-size: calc(16 * var(--u));
+  line-height: calc(24 * var(--u));
+  font-weight: 400;
+}
+
+.sunday {
+  color: var(--gold);
+}
+
+.day {
+  position: relative;
+}
+
+.today {
+  position: relative;
+  z-index: 1;
+}
+
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(40 * var(--u));
+  height: auto;
+  transform: translate(-50%, -50%);
+  animation: spin 15s linear infinite;
+  z-index: -1;
+}
+
+.time {
+  margin: calc(30 * var(--u)) 0 0;
+  font-size: calc(30 * var(--u));
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+}

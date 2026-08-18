@@ -1,0 +1,69 @@
+.section {
+  position: relative;
+  padding-top: calc(22 * var(--u));
+  text-align: center;
+}
+
+.greeting {
+  --bleed-w: calc(348 * var(--u));
+  margin: 0;
+  font-size: calc(17 * var(--u));
+  line-height: 1.9;
+  letter-spacing: 0.05em;
+}
+
+.nameRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: calc(24 * var(--u));
+}
+
+.name {
+  margin: 0;
+  font-size: calc(68 * var(--u));
+  line-height: 1.4;
+  overflow-wrap: break-word;
+  max-width: calc(236 * var(--u));
+}
+
+.sideOrnament {
+  position: absolute;
+  top: 50%;
+  width: calc(93 * var(--u));
+  height: auto;
+  transform: translateY(-50%);
+  opacity: 0.9;
+}
+
+.sideLeft {
+  left: calc(-71 * var(--u));
+}
+
+.sideRight {
+  right: calc(-71 * var(--u));
+}
+
+.message {
+  --bleed-w: calc(391 * var(--u));
+  margin: calc(28 * var(--u)) auto 0;
+  font-size: calc(17 * var(--u));
+  line-height: 1.9;
+  letter-spacing: 0.05em;
+}
+
+.watermarkLeft {
+  top: calc(210 * var(--u));
+  left: calc(-155 * var(--u));
+}
+
+.watermarkRight {
+  top: calc(560 * var(--u));
+  right: calc(-165 * var(--u));
+  animation-direction: reverse;
+}
+
+.closingOrnament {
+  margin-top: calc(40 * var(--u));
+}

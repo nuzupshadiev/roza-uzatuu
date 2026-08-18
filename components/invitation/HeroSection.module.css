@@ -1,0 +1,74 @@
+.hero {
+  position: relative;
+  height: calc(700 * var(--u));
+  overflow: hidden;
+}
+
+.photo {
+  position: absolute;
+  top: calc(-1 * var(--u));
+  left: 50%;
+  width: calc(419 * var(--u));
+  height: auto;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+/*
+ * Both titles live inside the gutter, so no swash can reach a screen edge. The
+ * reference's asymmetry — name left of centre, "кыз узатуу" tucked lower right —
+ * is kept with percentage insets so it survives every width.
+ */
+.titles {
+  position: absolute;
+  top: calc(2 * var(--u));
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 2;
+}
+
+.name {
+  margin: 0 11% 0 0;
+  color: var(--paper);
+  font-size: calc(85 * var(--u));
+  line-height: 1.45;
+  letter-spacing: calc(0.5 * var(--u));
+  text-align: center;
+  text-shadow: 0 calc(2 * var(--u)) calc(24 * var(--u)) rgba(60, 48, 22, 0.35);
+  overflow-wrap: break-word;
+}
+
+.kind {
+  margin: calc(-18 * var(--u)) 0 0 16%;
+  color: var(--paper);
+  font-size: calc(26 * var(--u));
+  line-height: 1.55;
+  text-align: center;
+  text-shadow: 0 calc(2 * var(--u)) calc(20 * var(--u)) rgba(60, 48, 22, 0.4);
+}
+
+.scrollHint {
+  position: absolute;
+  top: calc(596 * var(--u));
+  left: var(--gutter);
+  width: calc(112 * var(--u));
+  z-index: 3;
+  text-align: center;
+}
+
+.dot {
+  width: calc(8 * var(--u));
+  height: calc(8 * var(--u));
+  margin: 0 auto calc(8 * var(--u));
+  border-radius: 50%;
+  background: var(--gold-deep);
+  animation: scroll-dot 2s ease-in-out infinite alternate;
+}
+
+.hintText {
+  display: block;
+  color: var(--gold-deep);
+  font-size: calc(12 * var(--u));
+  line-height: 1.75;
+  letter-spacing: 0.12em;
+}

@@ -1,0 +1,122 @@
+.section {
+  position: relative;
+  padding-top: calc(48 * var(--u));
+  text-align: center;
+}
+
+.heading {
+  margin: calc(18 * var(--u)) 0 0;
+  color: var(--gold-deep);
+  font-size: calc(51 * var(--u));
+  line-height: 1.3;
+}
+
+.pin {
+  width: calc(54 * var(--u));
+  height: auto;
+  margin: calc(22 * var(--u)) auto 0;
+  animation: float 3.3s ease-in-out infinite;
+}
+
+.address {
+  --bleed-w: calc(377 * var(--u));
+  margin: calc(18 * var(--u)) auto 0;
+  font-size: calc(18 * var(--u));
+  line-height: 1.75;
+  letter-spacing: 0.07em;
+}
+
+.venue {
+  margin: calc(10 * var(--u)) 0 0;
+  color: var(--gold);
+  font-size: calc(30 * var(--u));
+  line-height: 1.55;
+  letter-spacing: 0.07em;
+}
+
+.suffix {
+  margin: 0;
+  font-size: calc(19 * var(--u));
+  line-height: 1.55;
+  letter-spacing: 0.07em;
+}
+
+.mapCard {
+  --bleed-w: calc(380 * var(--u));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(14 * var(--u));
+  aspect-ratio: 1;
+  margin: calc(30 * var(--u)) auto 0;
+  padding: calc(20 * var(--u));
+  border: calc(1 * var(--u)) solid rgba(171, 154, 122, 0.55);
+  border-radius: calc(6 * var(--u));
+  overflow: hidden;
+  text-decoration: none;
+  background: linear-gradient(180deg, #fbf8ef 0%, var(--cream) 100%);
+}
+
+/* Inner hairline, the way the reference frames its map panel. */
+.mapCard::before {
+  content: "";
+  position: absolute;
+  inset: calc(8 * var(--u));
+  border: calc(1 * var(--u)) solid rgba(171, 154, 122, 0.3);
+  border-radius: calc(3 * var(--u));
+  pointer-events: none;
+}
+
+.mapRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(300 * var(--u));
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.18;
+  animation: spin 26s linear infinite;
+  pointer-events: none;
+}
+
+.mapName {
+  position: relative;
+  margin: 0;
+  color: var(--gold-deep);
+  font-size: calc(22 * var(--u));
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+}
+
+.mapHint {
+  position: relative;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: calc(14 * var(--u));
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+}
+
+.mapButton {
+  position: relative;
+  margin-top: calc(6 * var(--u));
+  pointer-events: none;
+  min-width: calc(184 * var(--u));
+  max-width: 100%;
+  font-size: calc(16 * var(--u));
+}
+
+.mapCard:hover .mapButton {
+  background: var(--gold-deep);
+}
+
+.watermarkLeft {
+  top: calc(120 * var(--u));
+  left: calc(-175 * var(--u));
+}
+
+.closingOrnament {
+  margin-top: calc(46 * var(--u));
+}

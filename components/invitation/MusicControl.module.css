@@ -1,0 +1,36 @@
+.control {
+  position: absolute;
+  top: calc(567 * var(--u));
+  left: calc(230 * var(--u));
+  width: calc(85 * var(--u));
+  height: calc(87 * var(--u));
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--gold);
+  cursor: pointer;
+  z-index: 3;
+  box-shadow: 0 calc(4 * var(--u)) calc(18 * var(--u)) rgba(84, 71, 40, 0.22);
+  transition: transform 0.4s var(--ease-soft);
+}
+
+.control:hover {
+  transform: scale(1.05);
+}
+
+.ring {
+  position: absolute;
+  width: calc(70 * var(--u));
+  height: auto;
+  animation: spin 15s linear infinite;
+  pointer-events: none;
+}
+
+.icon {
+  position: relative;
+  width: calc(30 * var(--u));
+  height: calc(30 * var(--u));
+  color: var(--paper);
+}

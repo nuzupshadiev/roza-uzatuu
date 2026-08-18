@@ -1,0 +1,20 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--cream);
+  transition: opacity 0.75s ease-in-out 0.35s;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.heart {
+  width: calc(45 * var(--u));
+  height: auto;
+  animation: heartbeat 1.6s ease-in-out infinite;
+}
