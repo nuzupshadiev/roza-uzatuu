@@ -21,6 +21,36 @@ export function MusicControl({ src }: { src: string }) {
   const stoppedByGuest = useRef(false);
   const [available, setAvailable] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [resolvedSrc, setResolvedSrc] = useState(src);
+
+  /*
+   * Browsers defer media fetches until playback begins, which both hid the
+   * control (canplay never fired) and made the first tap wait on the network.
+   * Downloading the track directly answers availability and hands the element
+   * a local copy, so the tap starts the music instantly.
+   */
+  useEffect(() => {
+    const controller = new AbortController();
+    let objectUrl: string | null = null;
+    fetch(src, { signal: controller.signal })
+      .then((response) => {
+        if (controller.signal.aborted) return null;
+        setAvailable(response.ok);
+        return response.ok ? response.blob() : null;
+      })
+      .then((blob) => {
+        if (!blob || controller.signal.aborted) return;
+        // A swap mid-play would restart the track; the network copy is fine.
+        if (audioRef.current && !audioRef.current.paused) return;
+        objectUrl = URL.createObjectURL(blob);
+        setResolvedSrc(objectUrl);
+      })
+      .catch(() => undefined);
+    return () => {
+      controller.abort();
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [src]);
 
   const start = useCallback(() => {
     const audio = audioRef.current;
@@ -61,9 +91,9 @@ export function MusicControl({ src }: { src: string }) {
     <>
       <audio
         ref={audioRef}
-        src={src}
+        src={resolvedSrc}
         loop
-        preload="metadata"
+        preload="auto"
         onCanPlay={() => setAvailable(true)}
         onError={() => setAvailable(false)}
         onPlay={() => setPlaying(true)}
