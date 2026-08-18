@@ -98,8 +98,8 @@ export const invitation: InvitationData = {
   },
   /**
    * Public path of the background track. No audio file ships with the template —
-   * drop one at `public/assets/audio/music.mp3` (or let Invitation Admin install
+   * drop one at `public/assets/audio/music.m4a` (or let Invitation Admin install
    * a library track) and the music control appears on its own.
    */
-  music: "/assets/audio/music.mp3",
+  music: "/assets/audio/music.m4a",
 };
