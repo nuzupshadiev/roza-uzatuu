@@ -50,7 +50,7 @@ export const translations = {
       "Ноябрь",
       "Декабрь",
     ],
-    calendarLabel: "Тойдун күнү календарда",
+    calendarLabel: "Той күнү календарда белгиленген",
   },
 
   countdown: {
@@ -72,15 +72,15 @@ export const translations = {
 
   dressCode: {
     heading: "Дресс-код:",
-    lookbookButton: "образдарды көрүү",
+    lookbookButton: "кийим үлгүлөрүн көрүү",
   },
 
   rsvp: {
-    heading: "тойго катышууңузду тастыктооңузду сурайбыз",
+    heading: "тойго келериңизди билдирип коюшуңузду өтүнөбүз",
     nameLabel: "аты-жөнү",
     namePlaceholder: "аты-жөнү",
     attendanceLegend:
-      "Жубайыңыз менен келсеңиз, экөөңүздүн атыңызды кошо жазып коюңуз",
+      "Жубайыңыз менен келсеңиз, экөөңүздүн аты-жөнүңүздөрдү кошо жазып коюңуз",
     options: {
       alone: "Келем",
       couple: "Жубайым менен келем",
