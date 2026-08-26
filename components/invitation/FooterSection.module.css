@@ -15,34 +15,11 @@
   transform: rotate(180deg);
 }
 
-.label {
-  margin: calc(26 * var(--u)) 0 0;
-  font-size: calc(21 * var(--u));
-  line-height: 1.5;
-  letter-spacing: 0.08em;
-}
-
-.hosts {
-  --bleed-w: calc(352 * var(--u));
-  margin: calc(6 * var(--u)) auto 0;
-  font-size: calc(40 * var(--u));
-  line-height: 1.4;
-  overflow-wrap: break-word;
-}
-
-.parents {
-  margin: calc(4 * var(--u)) 0 0;
-  color: var(--gold-deep);
-  font-size: calc(15 * var(--u));
-  line-height: 1.7;
-  letter-spacing: 0.08em;
-}
-
 .flourishBottom {
   margin-top: calc(22 * var(--u));
 }
 
-.blessingBlock {
+.messageBlock {
   position: relative;
   margin-top: calc(30 * var(--u));
 }
@@ -67,7 +44,7 @@
   margin: 0 auto;
 }
 
-.blessing {
+.message {
   --bleed-w: calc(330 * var(--u));
   position: relative;
   margin: calc(-46 * var(--u)) auto 0;

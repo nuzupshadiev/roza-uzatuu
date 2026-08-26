@@ -53,6 +53,21 @@
   letter-spacing: 0.05em;
 }
 
+.hostsLabel {
+  margin: calc(34 * var(--u)) 0 0;
+  font-size: calc(15 * var(--u));
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+}
+
+.hosts {
+  --bleed-w: calc(352 * var(--u));
+  margin: calc(6 * var(--u)) auto 0;
+  font-size: calc(34 * var(--u));
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
 .watermarkLeft {
   top: calc(210 * var(--u));
   left: calc(-155 * var(--u));

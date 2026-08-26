@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { invitation } from "@/data/invitation";
 import { templateContent } from "@/data/template-content";
 import { translations } from "@/data/translations";
 import { Reveal } from "./Reveal";
@@ -8,11 +7,8 @@ import { PriglasiCredit } from "./PriglasiCredit";
 
 const { flourish, footerWash, ornamentRing } = templateContent.assets;
 
+/** The flourishes and wash, the guests' message, and the Priglasi credit row. */
 export function FooterSection() {
-  const hosts = invitation.weddingDetails.hosts.ky.trim();
-  const parents = invitation.people.bride.parents?.ky.trim();
-  const showParents = Boolean(parents) && parents !== hosts;
-
   return (
     <footer className={`${styles.footer} section-pad`}>
       <Reveal motion="zoom">
@@ -25,20 +21,6 @@ export function FooterSection() {
           alt=""
           aria-hidden="true"
         />
-      </Reveal>
-
-      <Reveal motion="up">
-        {hosts ? (
-          <>
-            <p className={`${styles.label} caps`}>{translations.footer.hostsLabel}</p>
-            <p className={`${styles.hosts} script bleed`}>{hosts}</p>
-          </>
-        ) : null}
-        {showParents ? (
-          <p className={`${styles.parents} caps`}>
-            {translations.footer.parentsLabel} {parents}
-          </p>
-        ) : null}
       </Reveal>
 
       <Reveal motion="zoom">
@@ -54,7 +36,7 @@ export function FooterSection() {
       </Reveal>
 
       <Reveal motion="down">
-        <div className={styles.blessingBlock}>
+        <div className={styles.messageBlock}>
           <Image
             className={styles.ring}
             src={ornamentRing.src}
@@ -73,7 +55,7 @@ export function FooterSection() {
             alt=""
             aria-hidden="true"
           />
-          <p className={`${styles.blessing} script bleed`}>{translations.footer.blessing}</p>
+          <p className={`${styles.message} script bleed`}>{translations.footer.message}</p>
         </div>
       </Reveal>
       <PriglasiCredit language="ky" />

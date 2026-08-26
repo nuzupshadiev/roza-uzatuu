@@ -10,6 +10,7 @@ const { ornamentDiamond, ornamentRing } = templateContent.assets;
 
 export function InvitationMessage() {
   const bride = invitation.people.bride;
+  const hosts = invitation.weddingDetails.hosts.ky.trim();
 
   return (
     <section className={`${styles.section} section-pad`} aria-labelledby="message-heading">
@@ -38,6 +39,13 @@ export function InvitationMessage() {
           {invitation.weddingDetails.customMessage.ky}
         </p>
       </Reveal>
+
+      {hosts ? (
+        <Reveal motion="up">
+          <p className={`${styles.hostsLabel} caps`}>{translations.message.hostsLabel}</p>
+          <p className={`${styles.hosts} script bleed`}>{hosts}</p>
+        </Reveal>
+      ) : null}
 
       <div className={styles.closingOrnament}>
         <Ornament />

@@ -20,7 +20,6 @@ export interface InvitationData {
   people: {
     bride: {
       name: LocalizedText;
-      parents?: LocalizedText;
     };
   };
   event: {
@@ -51,10 +50,6 @@ export const invitation: InvitationData = {
       name: {
         ru: "Арууке",
         ky: "Арууке",
-      },
-      parents: {
-        ru: "Нурлан - Гүлсүн",
-        ky: "Нурлан - Гүлсүн",
       },
     },
   },

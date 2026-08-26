@@ -51,7 +51,7 @@ export function PriglasiCredit({ language }: { language: string }) {
       </nav>
       <span aria-hidden="true" style={{ display: "inline", font: "inherit", letterSpacing: "inherit", textTransform: "none" }}>·</span>
       <span style={{ display: "inline", font: "inherit", letterSpacing: "inherit", textTransform: "none" }}>
-        {kyrgyz ? "Дизайн: " : "Дизайн от "}
+        {"Дизайн: "}
         <a
           href="https://www.instagram.com/priglasi.design.kg/"
           target="_blank"

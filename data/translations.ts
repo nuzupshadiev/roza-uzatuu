@@ -29,6 +29,8 @@ export const translations = {
   message: {
     greeting: "Урматтуу коноктор!",
     lead: "Сиздерди сүйүктүү",
+    /** Signs the invitation off, immediately above the hosts' names. */
+    hostsLabel: "Урматтоо менен,",
   },
 
   date: {
@@ -105,9 +107,7 @@ export const translations = {
   },
 
   footer: {
-    hostsLabel: "той ээлери:",
-    parentsLabel: "ата-энеси:",
-    blessing: "Келиңиздер, кадырлуу коногубуз болуңуздар!",
+    message: "Сиздерди чыдамсыздык менен күтөбүз!",
   },
 
   music: {
