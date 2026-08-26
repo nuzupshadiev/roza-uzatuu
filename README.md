@@ -38,7 +38,6 @@ never be loaded from JSON, an API or a database.
 | `slug` | RSVP payload (`invitationSlug`) |
 | `type` | Must stay `"kyz_uzatuu"` — this template has no groom |
 | `people.bride.name` | Hero title and the script name in the invitation message |
-| `people.bride.parents` | Optional line under the hosts in the footer |
 | `event.date`, `event.startTime` | Calendar card, start time, countdown target |
 | `venue.name`, `venue.address` | Venue section and the map card |
 | `venue.mapUrl` | Map card and “картадан көрүү” button |
@@ -48,7 +47,7 @@ never be loaded from JSON, an API or a database.
 | `rsvp.endpoint` | Fallback RSVP URL the admin fills in (see below) |
 | `music` | Public path of the background track (see below) |
 
-Optional values may be absent entirely: without `people.bride.parents` or
+Optional values may be absent entirely: without
 `weddingDetails.dressCode` the matching blocks are not rendered — no empty
 headings, cards or gaps are left behind.
 
