@@ -5,12 +5,19 @@ import { translations } from "@/data/translations";
 import { Ornament } from "./Ornament";
 import { Reveal } from "./Reveal";
 import styles from "./InvitationMessage.module.css";
+import { splitBrideMessage } from "@/lib/bride-message";
 
 const { ornamentDiamond, ornamentRing } = templateContent.assets;
 
 export function InvitationMessage() {
   const bride = invitation.people.bride;
   const hosts = invitation.weddingDetails.hosts.ky.trim();
+  // Kyrgyz only: this design has no language switch. The message still carries
+  // the name's position, so the halves are read out of it rather than printed
+  // with the token showing.
+  const { lead, suffix, rest } = splitBrideMessage(
+    invitation.weddingDetails.customMessage.ky,
+  );
 
   return (
     <section className={`${styles.section} section-pad`} aria-labelledby="message-heading">
@@ -22,21 +29,24 @@ export function InvitationMessage() {
           {translations.message.greeting}
           <br />
           <br />
-          {translations.message.lead}
+          {lead}
         </p>
       </Reveal>
 
       <Reveal motion="zoom">
         <div className={styles.nameRow}>
           <SideOrnament className={styles.sideLeft} />
-          <p className={`${styles.name} script`}>{bride.name.ky}</p>
+          <p className={`${styles.name} script`}>
+            {bride.name.ky}
+            {suffix}
+          </p>
           <SideOrnament className={styles.sideRight} />
         </div>
       </Reveal>
 
       <Reveal motion="up">
         <p className={`${styles.message} caps bleed`}>
-          {invitation.weddingDetails.customMessage.ky}
+          {rest}
         </p>
       </Reveal>
 
