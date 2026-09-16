@@ -36,37 +36,34 @@ export interface InvitationData {
     hosts: LocalizedText;
     dressCode?: LocalizedText;
   };
-  rsvp: {
-    endpoint: string;
-  };
   music: string;
 }
 
 export const invitation: InvitationData = {
-  slug: "aruuke-kyz-uzatuu",
+  slug: "saikal-kyz-uzatuu",
   type: "kyz_uzatuu",
   people: {
     bride: {
       name: {
-        ru: "Арууке",
-        ky: "Арууке",
+        ru: "Сайкал",
+        ky: "Сайкал",
       },
     },
   },
   event: {
-    date: "2026-09-20",
-    startTime: "17:00",
+    date: "2026-10-22",
+    startTime: "16:00",
   },
   venue: {
     name: {
-      ru: "«Алтын Уя»",
-      ky: "«Алтын Уя»",
+      ru: "«Ата»",
+      ky: "«Ата»",
     },
     address: {
-      ru: "г. Бишкек, пр. Чуй, 20",
-      ky: "Бишкек шаары, Чүй проспекти, 20",
+      ru: "г. Бишкек, ул. Мадиева, 22Б",
+      ky: "Бишкек шаары, Мадиев көчөсү, 22Б",
     },
-    mapUrl: "https://maps.google.com/?q=Bishkek",
+    mapUrl: "https://2gis.kg/bishkek/firm/70000001087638363",
   },
   weddingDetails: {
     customMessage: {
@@ -74,27 +71,13 @@ export const invitation: InvitationData = {
       ky: "Сиздерди сүйүктүү {{bride}} кызыбыздын узатуу тоюна арналган салтанаттуу ак дасторконубуздун кадырлуу коногу болууга чакырабыз!",
     },
     hosts: {
-      ru: "Нурлан - Гүлсүн",
-      ky: "Нурлан - Гүлсүн",
-    },
-    dressCode: {
-      ru: "Кечки майрамга жарашыктуу, өзүңүзгө ыңгайлуу кийим тандасаңыз болот. Катуу талаптар жок — эң башкысы, өзүңүздү жайлуу сезиңиз.",
-      ky: "Кечки майрамга жарашыктуу, өзүңүзгө ыңгайлуу кийим тандасаңыз болот. Катуу талаптар жок — эң башкысы, өзүңүздү жайлуу сезиңиз.",
+      ru: "Нурлан - Гулбарчын",
+      ky: "Нурлан - Гулбарчын",
     },
   },
   /**
-   * RSVP endpoint. Empty on purpose: the running invitation builds the endpoint
-   * from `NEXT_PUBLIC_RSVP_API_URL` and only falls back to this value, which
-   * Invitation Admin fills with the absolute central API URL when it generates
-   * a customer invitation.
-   */
-  rsvp: {
-    endpoint: "",
-  },
-  /**
-   * Public path of the background track. No audio file ships with the template —
-   * drop one at `public/assets/audio/music.m4a` (or let Invitation Admin install
-   * a library track) and the music control appears on its own.
+   * Public path of the background track. The music control only appears while
+   * the file really loads, so removing it simply hides the button.
    */
   music: "/assets/audio/music.m4a",
 };

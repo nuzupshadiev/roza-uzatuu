@@ -9,15 +9,37 @@ import styles from "./MusicControl.module.css";
 const { musicRing } = templateContent.assets;
 
 /**
+ * Every way a guest first touches the page. Browsers only let sound start on
+ * some of them — a tap, click or key press, not a bare scroll or wheel — and
+ * which ones differs by browser, so playback is tried on each until one works.
+ */
+const INTERACTIONS = [
+  "pointerdown",
+  "pointerup",
+  "touchstart",
+  "touchend",
+  "mousedown",
+  "click",
+  "keydown",
+  "scroll",
+  "wheel",
+] as const;
+
+/** Capture on `window` sees scrolls of inner elements and runs before React. */
+const LISTENER_OPTIONS = { capture: true, passive: true } as const;
+
+/**
  * Background music, off until the browser lets it start.
  *
  * The control only appears once the file really loads, so a template shipped
- * without an audio asset simply shows no button. Playback is attempted on the
- * guest's first interaction — the reference does the same — and never fights
- * an explicit pause.
+ * without an audio asset simply shows no button. Playback starts on the
+ * guest's first interaction with the page — listening begins before the track
+ * has downloaded, so an early tap is never lost — and never fights an explicit
+ * pause.
  */
 export function MusicControl({ src }: { src: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const controlRef = useRef<HTMLButtonElement>(null);
   const stoppedByGuest = useRef(false);
   const [available, setAvailable] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -59,19 +81,30 @@ export function MusicControl({ src }: { src: string }) {
   }, []);
 
   useEffect(() => {
-    if (!available) return;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    const kick = () => {
-      if (!stoppedByGuest.current) start();
+    const kick = (event: Event) => {
+      if (stoppedByGuest.current || !audio.paused) {
+        detach();
+        return;
+      }
+      // The music button runs its own toggle; starting here as well would
+      // have that same tap pause the track again.
+      if (event.target instanceof Node && controlRef.current?.contains(event.target)) return;
+      // A refused attempt (e.g. a scroll before any tap) just waits for the next one.
+      void audio.play().catch(() => undefined);
     };
-    const events = ["pointerdown", "keydown", "touchstart", "scroll"] as const;
-    for (const event of events) {
-      window.addEventListener(event, kick, { once: true, passive: true });
-    }
-    return () => {
-      for (const event of events) window.removeEventListener(event, kick);
+
+    const detach = () => {
+      for (const event of INTERACTIONS) window.removeEventListener(event, kick, LISTENER_OPTIONS);
+      audio.removeEventListener("playing", detach);
     };
-  }, [available, start]);
+
+    for (const event of INTERACTIONS) window.addEventListener(event, kick, LISTENER_OPTIONS);
+    audio.addEventListener("playing", detach);
+    return detach;
+  }, []);
 
   const toggle = () => {
     const audio = audioRef.current;
@@ -100,7 +133,13 @@ export function MusicControl({ src }: { src: string }) {
         onPause={() => setPlaying(false)}
       />
       {available ? (
-        <button type="button" className={styles.control} onClick={toggle} aria-label={label}>
+        <button
+          ref={controlRef}
+          type="button"
+          className={styles.control}
+          onClick={toggle}
+          aria-label={label}
+        >
           <Image
             className={styles.ring}
             src={musicRing.src}

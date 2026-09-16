@@ -1,17 +1,17 @@
-import { invitation } from "@/data/invitation";
-import { LANGUAGE } from "@/data/translations";
-
 export type Attendance = "yes" | "no";
 
-/** Path segment appended to the configured API base. */
-const RSVP_PATH = "api/rsvp";
+/**
+ * Same-origin route that writes the answer to Google Sheets. The sheet
+ * credentials stay on the server; the browser only ever talks to this path.
+ */
+const RSVP_ENDPOINT = "/api/rsvp";
 
 export interface RsvpPayload {
-  invitationSlug: string;
   guestName: string;
   attendance: Attendance;
   guestCount: number;
-  language: typeof LANGUAGE;
+  /** Honeypot — always empty for real guests. */
+  website: string;
 }
 
 /**
@@ -28,29 +28,14 @@ export class RsvpError extends Error {
   }
 }
 
-/**
- * Central RSVP API base. Vercel receives it as `NEXT_PUBLIC_RSVP_API_URL`; the
- * value Invitation Admin writes into `invitation.rsvp.endpoint` is only a
- * fallback for deployments configured before the variable existed.
- */
-export function rsvpEndpoint(): string | null {
-  const base = process.env.NEXT_PUBLIC_RSVP_API_URL?.trim().replace(/\/+$/, "");
-  if (base) return `${base}/${RSVP_PATH}`;
-
-  const configured: string = invitation.rsvp.endpoint;
-  const fallback = configured.trim().replace(/\/+$/, "");
-  if (!fallback) return null;
-  return fallback.endsWith(RSVP_PATH) ? fallback : `${fallback}/${RSVP_PATH}`;
-}
-
 export interface SubmitInput {
   guestName: string;
   attendance: Attendance;
   guestCount: number;
+  website: string;
 }
 
 interface RsvpMessages {
-  config: string;
   network: string;
   server: string;
 }
@@ -60,20 +45,16 @@ export async function submitRsvp(
   messages: RsvpMessages,
   signal?: AbortSignal,
 ): Promise<void> {
-  const endpoint = rsvpEndpoint();
-  if (!endpoint) throw new RsvpError(messages.config, "config");
-
   const payload: RsvpPayload = {
-    invitationSlug: invitation.slug,
     guestName: input.guestName.trim(),
     attendance: input.attendance,
     guestCount: input.attendance === "no" ? 0 : input.guestCount,
-    language: LANGUAGE,
+    website: input.website,
   };
 
   let response: Response;
   try {
-    response = await fetch(endpoint, {
+    response = await fetch(RSVP_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -85,7 +66,8 @@ export async function submitRsvp(
 
   const result: unknown = await response.json().catch(() => null);
   if (!response.ok || !isSuccess(result)) {
-    throw new RsvpError(serverMessage(result) ?? messages.server, "server");
+    const kind = response.status === 503 ? "config" : "server";
+    throw new RsvpError(serverMessage(result) ?? messages.server, kind);
   }
 }
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useId, useRef, useState, type FormEvent } from "react";
 import { templateContent } from "@/data/template-content";
 import { translations } from "@/data/translations";
-import { RsvpError, rsvpEndpoint, submitRsvp, type Attendance } from "@/lib/rsvp";
+import { RsvpError, submitRsvp, type Attendance } from "@/lib/rsvp";
 import { Reveal } from "./Reveal";
 import styles from "./RsvpSection.module.css";
 
@@ -15,17 +15,19 @@ const copy = translations.rsvp;
 type Choice = "alone" | "couple" | "declined";
 type Status = "idle" | "invalid" | "submitting" | "success" | "error";
 
-/** Missing at build time means the deployment was never given the RSVP API. */
-const configured = rsvpEndpoint() !== null;
-
 const attendanceOf: Record<Choice, Attendance> = {
   alone: "yes",
   couple: "yes",
   declined: "no",
 };
 
-export function RsvpSection() {
+/**
+ * `configured` is read on the server from the Google Sheets variables, so a
+ * deployment that was never given them says so instead of pretending to submit.
+ */
+export function RsvpSection({ configured }: { configured: boolean }) {
   const [guestName, setGuestName] = useState("");
+  const [website, setWebsite] = useState("");
   const [choice, setChoice] = useState<Choice | null>(null);
   const [guestCount, setGuestCount] = useState(2);
   const [status, setStatus] = useState<Status>("idle");
@@ -66,7 +68,7 @@ export function RsvpSection() {
 
     try {
       await submitRsvp(
-        { guestName, attendance: attendanceOf[choice], guestCount: count },
+        { guestName, attendance: attendanceOf[choice], guestCount: count, website },
         copy.errors,
       );
       setStatus("success");
@@ -139,6 +141,18 @@ export function RsvpSection() {
                 {fieldErrors.name}
               </p>
             ) : null}
+          </div>
+
+          {/* Honeypot: hidden from guests and assistive technology, filled only by bots. */}
+          <div className="visually-hidden" aria-hidden="true">
+            <input
+              type="text"
+              name="rsvp-extra"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(event) => setWebsite(event.target.value)}
+            />
           </div>
 
           <fieldset className={styles.group}>

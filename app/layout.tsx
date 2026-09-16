@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Comfortaa } from "next/font/google";
 import localFont from "next/font/local";
 import { invitation } from "@/data/invitation";
+import { templateContent } from "@/data/template-content";
 import { translations } from "@/data/translations";
+import { formatTime } from "@/lib/date";
 import "./globals.css";
 
 /*
@@ -45,26 +47,47 @@ const round = Comfortaa({
 });
 
 const brideName = invitation.people.bride.name.ky;
+const { date, startTime } = invitation.event;
+const venueName = [invitation.venue.name.ky, templateContent.venue.suffix].join(" ").trim();
+
+/** `22.10.2026, саат 16:00 · «Ата» рестораны. Сиздерди сүйүктүү Сайкал…` */
+const title = `${brideName} — ${translations.hero.kind}`;
+const description = [
+  `${date.split("-").reverse().join(".")}, ${translations.date.timePrefix} ${formatTime(startTime)} · ${venueName}.`,
+  invitation.weddingDetails.customMessage.ky.replace("{{bride}}", brideName),
+].join(" ");
 
 /**
- * Only set when the platform tells us where the invitation lives, so no
- * customer URL is ever baked into the repository.
+ * Link previews (WhatsApp, Telegram, Instagram) need absolute URLs. A custom
+ * domain goes in `NEXT_PUBLIC_SITE_URL`; otherwise Vercel's own production or
+ * deployment domain is used, so no customer URL is baked into the repository.
  */
-const deploymentUrl =
+const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
   (process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : undefined);
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000");
 
+/* The preview image itself is `app/opengraph-image.jpg` (1200×630), which
+   Next.js adds as og:image and twitter:image with its size and alt text. */
 export const metadata: Metadata = {
-  ...(deploymentUrl ? { metadataBase: new URL(deploymentUrl) } : {}),
-  title: `${brideName} — ${translations.hero.kind}`,
-  description: `${brideName} кызыбыздын узатуу тоюна чакыруу`,
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
   openGraph: {
     type: "website",
     locale: "ky_KG",
-    title: `${brideName} — ${translations.hero.kind}`,
-    description: `${brideName} кызыбыздын узатуу тоюна чакыруу`,
+    url: "/",
+    siteName: title,
+    title,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
   },
   robots: { index: false, follow: false },
 };

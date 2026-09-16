@@ -7,6 +7,7 @@ import { IntroScreen } from "@/components/invitation/IntroScreen";
 import { InvitationMessage } from "@/components/invitation/InvitationMessage";
 import { RsvpSection } from "@/components/invitation/RsvpSection";
 import { VenueSection } from "@/components/invitation/VenueSection";
+import { isSheetsConfigured } from "@/lib/google-sheets";
 
 export default function Page() {
   return (
@@ -19,7 +20,7 @@ export default function Page() {
         <Countdown />
         <VenueSection />
         <DressCodeSection />
-        <RsvpSection />
+        <RsvpSection configured={isSheetsConfigured()} />
         <FooterSection />
       </main>
     </div>
