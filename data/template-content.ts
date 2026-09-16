@@ -25,7 +25,7 @@ export const templateContent = {
      * Set to an empty string when the venue is not a restaurant — the line then
      * disappears instead of showing a wrong word.
      */
-    suffix: "рестораны",
+    suffix: "мейманканасы",
   },
 
   dressCode: {

@@ -1,10 +1,9 @@
-# Saikal — kyz uzatuu invitation
+# Aruuke — kyz uzatuu invitation template
 
 A single-page Kyrgyz **кыз узатуу** invitation built with the Next.js App Router.
 The design is a fixed 320-unit column — a full-bleed yurt photograph, gold
 Kyrgyz ornament, a live month calendar, a flip-card countdown, the venue with a
-map link, an optional dress code, and an RSVP form that saves every answer to a
-Google Sheet.
+map link, dress code, and an RSVP form that posts to the central RSVP API.
 
 The template ships in Kyrgyz only. Every localized value in `data/invitation.ts`
 still carries the `ru` and `ky` keys the Invitation Admin contract expects;
@@ -14,7 +13,7 @@ components read `.ky`.
 
 ```bash
 npm install
-cp .env.example .env.local     # fill in the Google Sheets credentials
+cp .env.example .env.local     # point NEXT_PUBLIC_RSVP_API_URL at the RSVP API
 npm run dev                    # http://localhost:3000
 ```
 
@@ -36,7 +35,7 @@ never be loaded from JSON, an API or a database.
 
 | Field | Used by |
 | --- | --- |
-| `slug` | Identifies the invitation |
+| `slug` | RSVP payload (`invitationSlug`) |
 | `type` | Must stay `"kyz_uzatuu"` — this template has no groom |
 | `people.bride.name` | Hero title and the script name in the invitation message |
 | `event.date`, `event.startTime` | Calendar card, start time, countdown target |
@@ -45,6 +44,7 @@ never be loaded from JSON, an API or a database.
 | `weddingDetails.customMessage` | Invitation text under the bride's name |
 | `weddingDetails.hosts` | Footer “той ээлери:” |
 | `weddingDetails.dressCode` | Dress-code section — the whole section disappears when it is empty |
+| `rsvp.endpoint` | Fallback RSVP URL the admin fills in (see below) |
 | `music` | Public path of the background track (see below) |
 
 Optional values may be absent entirely: without
@@ -58,62 +58,24 @@ either file.
 
 ## RSVP integration
 
-The form posts to `app/api/rsvp/route.ts` on the same deployment, which
-validates the answer again and appends one row to the Google Sheet:
+The form posts straight to the central RSVP API. There is no API route inside
+this template and no RSVP data is written locally.
 
-| Жөнөтүлгөн убакыт | Аты-жөнү | Жообу | Коноктордун саны |
-| --- | --- | --- | --- |
-| `2026-10-01 18:42:07` (Bishkek time) | guest's name | Келет · Жубайы менен келет · Келе албайт | 1–20, or 0 |
+```
+POST ${NEXT_PUBLIC_RSVP_API_URL}/api/rsvp
+Content-Type: application/json
 
-The header row is written automatically while the sheet is still empty.
+{ invitationSlug, guestName, attendance: "yes" | "no", guestCount, language: "ky" }
+```
+
+`lib/rsvp.ts` builds the endpoint from `NEXT_PUBLIC_RSVP_API_URL` and falls back
+to `invitation.rsvp.endpoint` (which Invitation Admin fills with the absolute
+URL when it generates an invitation). When neither is configured the RSVP
+section shows a visible configuration error instead of pretending to submit.
 
 Guests answer with the three options the design calls for — “Келем” (1 guest),
 “Жубайым менен келем” (2 guests, adjustable up to 20 with the stepper) and
-“Келе албайм”, which is saved with a guest count of 0.
-
-### Security
-
-- The service-account credentials are read only in `lib/google-sheets.ts`,
-  which imports `server-only`; none of the variables are `NEXT_PUBLIC_`, so
-  nothing reaches the browser bundle.
-- No Google SDK is bundled — the route signs its own JWT with `node:crypto`
-  and calls the Sheets REST API with an 8-second timeout.
-- Name, answer and guest count are re-validated on the server, the body is
-  capped at 2 KB, cross-site browser posts are rejected, a hidden honeypot
-  field silently drops bot submissions, and values are written as `RAW` so a
-  typed formula is stored as plain text.
-- Google errors are logged on the server only; guests see a generic retry
-  message.
-
-When the variables are missing, the RSVP section shows a visible configuration
-error instead of pretending to submit.
-
-## Deploying to Vercel
-
-1. Google Cloud Console → enable the **Google Sheets API**, create a service
-   account and download a JSON key.
-2. Share the spreadsheet with the service account's email as an **Editor**.
-3. Vercel → Project → Settings → Environment Variables, add the variables from
-   `.env.example` for Production and Preview:
-   - `GOOGLE_CLIENT_EMAIL` — `client_email` from the key
-   - `GOOGLE_PRIVATE_KEY` — `private_key` from the key, pasted as-is
-     (literal `\n` sequences and real newlines both work)
-   - `GOOGLE_SHEET_ID` — the id from the sheet URL
-   - `GOOGLE_SHEET_NAME` — optional tab name; the first tab otherwise
-   - `NEXT_PUBLIC_SITE_URL` — optional, only for a custom domain
-4. Redeploy so the new variables are picked up.
-
-### Link previews
-
-`app/opengraph-image.jpg` (1200×630, under 300 KB so WhatsApp accepts it) and
-`app/opengraph-image.alt.txt` become `og:image` / `twitter:image`. The title and
-description in `app/layout.tsx` are built from `data/invitation.ts`. Preview
-URLs must be absolute, so they use `NEXT_PUBLIC_SITE_URL` when set and Vercel's
-production domain otherwise.
-
-WhatsApp caches a link's preview the first time it is shared — check the
-preview before sending the link out, and keep Vercel Deployment Protection off
-for the production domain so its crawler can read the page.
+“Келе албайм”, which sends `attendance: "no"` with `guestCount: 0`.
 
 ## Assets
 

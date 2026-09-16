@@ -4,26 +4,13 @@
   overflow: hidden;
 }
 
-/* The column stops growing near 429px, so the largest phones (430–440px) would
-   show a cream strip beside the photo. On phones the hero reaches the screen
-   edges instead; wider screens keep the framed column. */
-@media (max-width: 480px) {
-  .hero {
-    margin-inline: calc((100% - 100vw) / 2);
-  }
-}
-
 .photo {
   position: absolute;
   top: calc(-1 * var(--u));
   left: 50%;
   width: calc(419 * var(--u));
   height: auto;
-  /* The global `max-width: 100%` holds the photo to the column, and centring
-     it lands on a fractional pixel at some phone widths, leaving a hairline of
-     cream down the left edge. A 2% zoom from the top keeps both edges covered. */
-  transform: translateX(-50%) scale(1.02);
-  transform-origin: 50% 0;
+  transform: translateX(-50%);
   z-index: 1;
 }
 

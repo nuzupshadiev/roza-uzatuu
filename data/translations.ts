@@ -35,7 +35,7 @@ export const translations = {
 
   date: {
     label: "күнү",
-    /** Rendered as `саат 16:00`. */
+    /** Rendered as `саат 17:00`. */
     timePrefix: "саат",
     weekdays: ["дш", "шш", "шр", "бш", "жм", "иш", "жк"],
     months: [
