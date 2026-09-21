@@ -19,6 +19,9 @@ const { musicRing } = templateContent.assets;
 export function MusicControl({ src }: { src: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const stoppedByGuest = useRef(false);
+  // Separate from the flag above: this one records that the tab going away is
+  // what silenced the track, and only such a pause is ever undone.
+  const pausedByHiddenTab = useRef(false);
   const [available, setAvailable] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [resolvedSrc, setResolvedSrc] = useState(src);
@@ -73,14 +76,46 @@ export function MusicControl({ src }: { src: string }) {
     };
   }, [available, start]);
 
+  /*
+   * A tab the guest has left plays to nobody, so the track pauses with it and
+   * resumes from the same spot when they return — `play()` straight on the
+   * element, since `start` is the entry point for a fresh playback. Music the
+   * guest stopped, or that never started, stays quiet.
+   */
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      if (document.hidden) {
+        if (audio.paused) return;
+        pausedByHiddenTab.current = true;
+        audio.pause();
+        return;
+      }
+
+      if (!pausedByHiddenTab.current) return;
+      pausedByHiddenTab.current = false;
+      if (stoppedByGuest.current) return;
+      void audio.play().catch(() => setPlaying(false));
+    };
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, []);
+
   const toggle = () => {
     const audio = audioRef.current;
     if (!audio) return;
     if (audio.paused) {
       stoppedByGuest.current = false;
+      pausedByHiddenTab.current = false;
       start();
     } else {
       stoppedByGuest.current = true;
+      pausedByHiddenTab.current = false;
       audio.pause();
     }
   };
