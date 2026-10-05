@@ -12,18 +12,18 @@ components read `.ky`.
 ## Local development
 
 ```bash
-npm install
+pnpm install
 cp .env.example .env.local     # point NEXT_PUBLIC_RSVP_API_URL at the RSVP API
-npm run dev                    # http://localhost:3000
+pnpm dev                       # http://localhost:3000
 ```
 
 ## Checks and production build
 
 ```bash
-npm run lint        # eslint
-npm run typecheck   # tsc --noEmit
-npm run build       # next build
-npm start           # serve the production build
+pnpm lint           # eslint
+pnpm typecheck      # tsc --noEmit
+pnpm build          # next build
+pnpm start          # serve the production build
 ```
 
 ## Invitation data contract
@@ -115,7 +115,7 @@ replacing the files in `app/fonts/` and the `src` paths in `app/layout.tsx`.
    shifts while loading.
 3. Keep transparency (webp/svg/png) for decorative art; the cream page shows
    through it.
-4. Re-run `npm run build` and check the section at 320px and at 1440px.
+4. Re-run `pnpm build` and check the section at 320px and at 1440px.
 
 ### Background music
 
