@@ -36,37 +36,34 @@ export interface InvitationData {
     hosts: LocalizedText;
     dressCode?: LocalizedText;
   };
-  rsvp: {
-    endpoint: string;
-  };
   music: string;
 }
 
 export const invitation: InvitationData = {
-  slug: "aruuke-kyz-uzatuu",
+  slug: "roza-kyz-uzatuu",
   type: "kyz_uzatuu",
   people: {
     bride: {
       name: {
-        ru: "Арууке",
-        ky: "Арууке",
+        ru: "Роза",
+        ky: "Роза",
       },
     },
   },
   event: {
-    date: "2026-09-20",
-    startTime: "17:00",
+    date: "2026-11-13",
+    startTime: "16:00",
   },
   venue: {
     name: {
-      ru: "«Алтын Уя»",
-      ky: "«Алтын Уя»",
+      ru: "«Aksaray Grand Hall»",
+      ky: "«Aksaray Grand Hall»",
     },
     address: {
-      ru: "г. Бишкек, пр. Чуй, 20",
-      ky: "Бишкек шаары, Чүй проспекти, 20",
+      ru: "Улица Анкара, 114",
+      ky: "Анкара көчөсү, 114",
     },
-    mapUrl: "https://maps.google.com/?q=Bishkek",
+    mapUrl: "https://2gis.kg/bishkek/firm/70000001033906214",
   },
   weddingDetails: {
     customMessage: {
@@ -74,22 +71,9 @@ export const invitation: InvitationData = {
       ky: "Сиздерди сүйүктүү {{bride}} кызыбыздын узатуу тоюна арналган салтанаттуу ак дасторконубуздун кадырлуу коногу болууга чакырабыз!",
     },
     hosts: {
-      ru: "Нурлан - Гүлсүн",
-      ky: "Нурлан - Гүлсүн",
+      ru: "Мирбек - Гүлайым",
+      ky: "Мирбек - Гүлайым",
     },
-    dressCode: {
-      ru: "Кечки майрамга жарашыктуу, өзүңүзгө ыңгайлуу кийим тандасаңыз болот. Катуу талаптар жок — эң башкысы, өзүңүздү жайлуу сезиңиз.",
-      ky: "Кечки майрамга жарашыктуу, өзүңүзгө ыңгайлуу кийим тандасаңыз болот. Катуу талаптар жок — эң башкысы, өзүңүздү жайлуу сезиңиз.",
-    },
-  },
-  /**
-   * RSVP endpoint. Empty on purpose: the running invitation builds the endpoint
-   * from `NEXT_PUBLIC_RSVP_API_URL` and only falls back to this value, which
-   * Invitation Admin fills with the absolute central API URL when it generates
-   * a customer invitation.
-   */
-  rsvp: {
-    endpoint: "",
   },
   /**
    * Public path of the background track. No audio file ships with the template —

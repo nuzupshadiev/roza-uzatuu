@@ -62,9 +62,25 @@
   position: relative;
 }
 
+/* The wedding day: white on a gold disc, inside the turning sparkle ring. */
 .today {
   position: relative;
   z-index: 1;
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.today::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(28 * var(--u));
+  height: calc(28 * var(--u));
+  border-radius: 50%;
+  background: var(--gold);
+  transform: translate(-50%, -50%);
+  z-index: -1;
 }
 
 .ring {
@@ -73,7 +89,9 @@
   left: 50%;
   width: calc(40 * var(--u));
   height: auto;
-  transform: translate(-50%, -50%);
+  /* `translate`, not `transform`: it applies after the spin's `rotate`, so the
+     ring turns about its own centre instead of orbiting this point. */
+  translate: -50% -50%;
   animation: spin 15s linear infinite;
   z-index: -1;
 }
@@ -83,4 +101,11 @@
   font-size: calc(30 * var(--u));
   line-height: 1.5;
   letter-spacing: 0.08em;
+}
+
+/* Local keyframes: CSS Modules rename animation names, so the global ones can't be reached from here. */
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
 }

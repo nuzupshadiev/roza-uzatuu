@@ -18,3 +18,14 @@
   height: auto;
   animation: heartbeat 1.6s ease-in-out infinite;
 }
+
+/* Local keyframes: CSS Modules rename animation names, so the global ones can't be reached from here. */
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}

@@ -30,9 +30,7 @@ export function HeroSection() {
 
       <div className={styles.scrollHint} aria-hidden="true">
         <span className={`${styles.dot} scroll-dot`} />
-        {/* <span className={`${styles.hintText} caps`}>
-          {translations.hero.scrollHint}
-        </span> */}
+        <span className={`${styles.hintText} caps`}>{translations.hero.scrollHint}</span>
       </div>
 
       <MusicControl src={invitation.music} />

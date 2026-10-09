@@ -24,7 +24,7 @@ export function eventTimestamp(date: string, startTime: string): number {
   return Date.parse(`${date}T${startTime}:00${EVENT_TIME_ZONE_OFFSET}`);
 }
 
-/** Kyrgyz month name of the event date, e.g. `Сентябрь`. */
+/** Kyrgyz month name of the event date, e.g. `Ноябрь`. */
 export function monthName(date: string): string {
   return translations.date.months[parseEventDate(date).month - 1];
 }
@@ -37,7 +37,7 @@ export function eventDay(date: string): number {
   return parseEventDate(date).day;
 }
 
-/** `17:00` → `17:00`, tolerating `7:5` style input. */
+/** `16:00` → `16:00`, tolerating `7:5` style input. */
 export function formatTime(startTime: string): string {
   const [hours, minutes] = startTime.split(":");
   return `${hours.padStart(2, "0")}:${(minutes ?? "00").padStart(2, "0")}`;

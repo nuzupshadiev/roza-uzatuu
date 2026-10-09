@@ -3,6 +3,7 @@ import { Comfortaa } from "next/font/google";
 import localFont from "next/font/local";
 import { invitation } from "@/data/invitation";
 import { translations } from "@/data/translations";
+import { eventDay, eventYear, formatTime, monthName } from "@/lib/date";
 import "./globals.css";
 
 /*
@@ -45,6 +46,15 @@ const round = Comfortaa({
 });
 
 const brideName = invitation.people.bride.name.ky;
+const { date, startTime } = invitation.event;
+
+const title = `${brideName} — ${translations.hero.kind}`;
+/** Who, when and where — the line WhatsApp shows under the preview title. */
+const description = [
+  `${brideName} ${translations.meta.invitation}.`,
+  `${eventDay(date)}-${monthName(date).toLowerCase()}, ${eventYear(date)}${translations.meta.yearSuffix},`,
+  `${translations.date.timePrefix} ${formatTime(startTime)} · ${invitation.venue.name.ky}`,
+].join(" ");
 
 /**
  * Only set when the platform tells us where the invitation lives, so no
@@ -56,16 +66,24 @@ const deploymentUrl =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : undefined);
 
+/*
+ * The preview image is `app/opengraph-image.jpg` (with its `.alt.txt`), which
+ * Next.js turns into absolute `og:image` tags against the deployment URL —
+ * WhatsApp ignores relative ones. Twitter tags inherit title, description and
+ * image from `openGraph`.
+ */
 export const metadata: Metadata = {
   ...(deploymentUrl ? { metadataBase: new URL(deploymentUrl) } : {}),
-  title: `${brideName} — ${translations.hero.kind}`,
-  description: `${brideName} кызыбыздын узатуу тоюна чакыруу`,
+  title,
+  description,
   openGraph: {
     type: "website",
     locale: "ky_KG",
-    title: `${brideName} — ${translations.hero.kind}`,
-    description: `${brideName} кызыбыздын узатуу тоюна чакыруу`,
+    siteName: title,
+    title,
+    description,
   },
+  twitter: { card: "summary_large_image" },
   robots: { index: false, follow: false },
 };
 

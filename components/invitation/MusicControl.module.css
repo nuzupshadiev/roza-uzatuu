@@ -1,6 +1,7 @@
+/* Pinned to the hero's bottom edge, which follows the screen height. */
 .control {
   position: absolute;
-  top: calc(567 * var(--u));
+  bottom: calc(46 * var(--u));
   left: calc(230 * var(--u));
   width: calc(85 * var(--u));
   height: calc(87 * var(--u));
@@ -33,4 +34,11 @@
   width: calc(30 * var(--u));
   height: calc(30 * var(--u));
   color: var(--paper);
+}
+
+/* Local keyframes: CSS Modules rename animation names, so the global ones can't be reached from here. */
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
 }

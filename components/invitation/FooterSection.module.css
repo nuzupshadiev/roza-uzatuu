@@ -30,7 +30,9 @@
   left: 50%;
   width: calc(196 * var(--u));
   height: auto;
-  transform: translateX(-50%);
+  /* `translate`, not `transform`: it applies after the spin's `rotate`, so the
+     ring turns about its own centre instead of orbiting this point. */
+  translate: -50% 0;
   opacity: 0.3;
   animation: spin 20s linear infinite;
   pointer-events: none;
@@ -58,4 +60,11 @@
   color: rgba(0, 0, 0, 0.35);
   font-size: calc(12 * var(--u));
   letter-spacing: 0.14em;
+}
+
+/* Local keyframes: CSS Modules rename animation names, so the global ones can't be reached from here. */
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
 }

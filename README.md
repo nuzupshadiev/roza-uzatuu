@@ -1,9 +1,9 @@
-# Aruuke — kyz uzatuu invitation template
+# Roza — kyz uzatuu invitation
 
 A single-page Kyrgyz **кыз узатуу** invitation built with the Next.js App Router.
 The design is a fixed 320-unit column — a full-bleed yurt photograph, gold
 Kyrgyz ornament, a live month calendar, a flip-card countdown, the venue with a
-map link, dress code, and an RSVP form that posts to the central RSVP API.
+map link, dress code, and an RSVP form that saves each guest to a Google Sheet.
 
 The template ships in Kyrgyz only. Every localized value in `data/invitation.ts`
 still carries the `ru` and `ky` keys the Invitation Admin contract expects;
@@ -13,7 +13,7 @@ components read `.ky`.
 
 ```bash
 pnpm install
-cp .env.example .env.local     # point NEXT_PUBLIC_RSVP_API_URL at the RSVP API
+cp .env.example .env.local     # fill in the Google service-account values
 pnpm dev                       # http://localhost:3000
 ```
 
@@ -35,7 +35,7 @@ never be loaded from JSON, an API or a database.
 
 | Field | Used by |
 | --- | --- |
-| `slug` | RSVP payload (`invitationSlug`) |
+| `slug` | Identifies the invitation to Invitation Admin |
 | `type` | Must stay `"kyz_uzatuu"` — this template has no groom |
 | `people.bride.name` | Hero title and the script name in the invitation message |
 | `event.date`, `event.startTime` | Calendar card, start time, countdown target |
@@ -44,7 +44,6 @@ never be loaded from JSON, an API or a database.
 | `weddingDetails.customMessage` | Invitation text under the bride's name |
 | `weddingDetails.hosts` | Footer “той ээлери:” |
 | `weddingDetails.dressCode` | Dress-code section — the whole section disappears when it is empty |
-| `rsvp.endpoint` | Fallback RSVP URL the admin fills in (see below) |
 | `music` | Public path of the background track (see below) |
 
 Optional values may be absent entirely: without
@@ -58,24 +57,48 @@ either file.
 
 ## RSVP integration
 
-The form posts straight to the central RSVP API. There is no API route inside
-this template and no RSVP data is written locally.
+The form posts to this deployment's own route, `app/api/rsvp/route.ts`, which
+appends one row per answer to a Google Sheet as a service account:
 
 ```
-POST ${NEXT_PUBLIC_RSVP_API_URL}/api/rsvp
+POST /api/rsvp
 Content-Type: application/json
 
-{ invitationSlug, guestName, attendance: "yes" | "no", guestCount, language: "ky" }
+{ guestName, attendance: "yes" | "no", guestCount }
 ```
 
-`lib/rsvp.ts` builds the endpoint from `NEXT_PUBLIC_RSVP_API_URL` and falls back
-to `invitation.rsvp.endpoint` (which Invitation Admin fills with the absolute
-URL when it generates an invitation). When neither is configured the RSVP
-section shows a visible configuration error instead of pretending to submit.
+| Variable | Value |
+| --- | --- |
+| `GOOGLE_CLIENT_EMAIL` | The service account's email |
+| `GOOGLE_PRIVATE_KEY` | Its private key — the PEM block, or one line with `\n` |
+| `GOOGLE_SHEET_ID` | The id from the sheet URL, `…/spreadsheets/d/<id>/edit` |
+| `NEXT_PUBLIC_SITE_URL` | Optional: the public URL, for link previews off Vercel |
+
+Set them in `.env.local` for development and in the hosting dashboard for
+production; none of them is ever sent to the browser. Then share the sheet with
+the service account's email as an **Editor** and enable the Google Sheets API in
+its Cloud project.
+
+Rows land on the first tab as `Жөнөтүлгөн убакыт · Аты-жөнү · Жооп ·
+Коноктордун саны` (Bishkek time); the header is written once, only while row 1
+is empty. Values are stored as typed (`RAW`), so a guest name can never run as a
+formula. The route re-checks everything the form validates, rejects posts from
+other sites, and never passes Google's error text to the guest. Without the
+credentials the RSVP section shows a visible configuration error instead of
+pretending to submit.
 
 Guests answer with the three options the design calls for — “Келем” (1 guest),
 “Жубайым менен келем” (2 guests, adjustable up to 20 with the stepper) and
 “Келе албайм”, which sends `attendance: "no"` with `guestCount: 0`.
+
+## Link previews
+
+`app/opengraph-image.jpg` (1200×630, under 40 KB — WhatsApp drops large
+images) and `app/opengraph-image.alt.txt` become the `og:image` tags; the title
+and the who/when/where description are built from `data/invitation.ts` in
+`app/layout.tsx`. WhatsApp needs an absolute image URL: on Vercel it comes from
+the production domain automatically, elsewhere set `NEXT_PUBLIC_SITE_URL`.
+WhatsApp caches previews per URL, so re-share a link after changing them.
 
 ## Assets
 

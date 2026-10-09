@@ -17,13 +17,21 @@ export const translations = {
   /** <html lang> and the locale used for date formatting. */
   locale: "ky-KG",
 
+  /** Page description and the WhatsApp / Telegram link preview. */
+  meta: {
+    /** Follows the bride's name in the description. */
+    invitation: "кызыбыздын узатуу тоюна чакыруу",
+    /** `2026` → `2026-жыл`. */
+    yearSuffix: "-жыл",
+  },
+
   intro: {
     label: "Чакыруу жүктөлүүдө",
   },
 
   hero: {
     kind: "кыз узатуу",
-    scrollHint: "жогору жылжытыңыз",
+    scrollHint: "төмөн жылдырыңыз",
   },
 
   message: {
@@ -35,7 +43,7 @@ export const translations = {
 
   date: {
     label: "күнү",
-    /** Rendered as `саат 17:00`. */
+    /** Rendered as `саат 16:00`. */
     timePrefix: "саат",
     weekdays: ["дш", "шш", "шр", "бш", "жм", "иш", "жк"],
     months: [

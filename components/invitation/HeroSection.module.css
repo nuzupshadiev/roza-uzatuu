@@ -1,17 +1,48 @@
+/*
+ * Exactly one screen tall on every device. `svh` is the height with the
+ * browser's toolbars showing, so the bottom row is never hidden under them.
+ * The floor only matters on landscape phones, where a screen-tall hero would
+ * push the titles into the bottom row.
+ */
 .hero {
   position: relative;
-  height: calc(700 * var(--u));
+  height: 100vh;
+  height: 100svh;
+  min-height: calc(420 * var(--u));
   overflow: hidden;
 }
 
+/*
+ * Covers the hero at any height, anchored to the bottom where the photo fades
+ * out: a short screen gives up ceiling at the top, never the fade, and a tall
+ * one gets the photo scaled up.
+ */
 .photo {
   position: absolute;
   top: calc(-1 * var(--u));
-  left: 50%;
-  width: calc(419 * var(--u));
-  height: auto;
-  transform: translateX(-50%);
+  left: 0;
+  width: 100%;
+  height: calc(100% + var(--u));
+  object-fit: cover;
+  object-position: 50% 100%;
   z-index: 1;
+}
+
+/*
+ * The drawing sets the scroll hint and the music control on a plain cream band
+ * under the photo. A screen-tall hero has no room for that band, so the photo
+ * fades into cream behind them instead.
+ */
+.hero::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: calc(200 * var(--u));
+  background: linear-gradient(rgba(248, 245, 236, 0), var(--cream) 60%);
+  z-index: 2;
+  pointer-events: none;
 }
 
 /*
@@ -47,19 +78,22 @@
   text-shadow: 0 calc(2 * var(--u)) calc(20 * var(--u)) rgba(60, 48, 22, 0.4);
 }
 
+/* Bottom-aligned with the music control, whatever the screen height. */
 .scrollHint {
   position: absolute;
-  top: calc(596 * var(--u));
+  bottom: calc(46 * var(--u));
   left: var(--gutter);
   width: calc(112 * var(--u));
   z-index: 3;
   text-align: center;
 }
 
+/* The dot sinks 30 units as it pulses, so the label starts below that path. */
 .dot {
+  display: block;
   width: calc(8 * var(--u));
   height: calc(8 * var(--u));
-  margin: 0 auto calc(8 * var(--u));
+  margin: 0 auto calc(38 * var(--u));
   border-radius: 50%;
   background: var(--gold-deep);
   animation: scroll-dot 2s ease-in-out infinite alternate;
@@ -71,4 +105,16 @@
   font-size: calc(12 * var(--u));
   line-height: 1.75;
   letter-spacing: 0.12em;
+}
+
+/* Local keyframes: CSS Modules rename animation names, so the global ones can't be reached from here. */
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(calc(30 * var(--u)));
+    opacity: 0.35;
+  }
 }

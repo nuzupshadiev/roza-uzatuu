@@ -75,7 +75,9 @@
   left: 50%;
   width: calc(300 * var(--u));
   height: auto;
-  transform: translate(-50%, -50%);
+  /* `translate`, not `transform`: it applies after the spin's `rotate`, so the
+     ring turns about its own centre instead of orbiting this point. */
+  translate: -50% -50%;
   opacity: 0.18;
   animation: spin 26s linear infinite;
   pointer-events: none;
@@ -119,4 +121,21 @@
 
 .closingOrnament {
   margin-top: calc(46 * var(--u));
+}
+
+/* Local keyframes: CSS Modules rename animation names, so the global ones can't be reached from here. */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(calc(-14 * var(--u)));
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
 }

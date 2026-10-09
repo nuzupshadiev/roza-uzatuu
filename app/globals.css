@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ *
- * Aruuke — kyz uzatuu invitation
+ * Roza — kyz uzatuu invitation
  *
  * The layout is a single 320-unit column, the way the reference is drawn.
  * `--u` is one design unit: exactly 1px at a 320px viewport, growing with the
@@ -194,42 +194,17 @@ a {
  * Motion
  * ------------------------------------------------------------------ */
 
-/* Animates the independent `rotate` property so elements keep their own
-   `transform` (centring translations) while they turn. */
+/* Animates the independent `rotate` property, which leaves `transform` free.
+   Anything that spins must centre itself with `translate`, never with
+   `transform: translate(…)`: `rotate` turns the box about its original centre
+   after a `transform` has moved it, so the element would orbit that point.
+
+   CSS Modules rename every animation name inside a `.module.css` file, so a
+   module can never reach keyframes defined here — each module carries its own
+   copy of the keyframes it runs. This one serves the global rules below. */
 @keyframes spin {
   to {
     rotate: 360deg;
-  }
-}
-
-@keyframes heartbeat {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(calc(-14 * var(--u)));
-  }
-}
-
-@keyframes scroll-dot {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(calc(30 * var(--u)));
-    opacity: 0.35;
   }
 }
 
@@ -300,7 +275,9 @@ a {
   aspect-ratio: 1;
   background: var(--frame-ornament) center / contain no-repeat;
   opacity: 0;
-  transform: translateY(-50%);
+  /* `translate` applies after the spin's `rotate`, so the ornament turns in
+     place rather than orbiting. */
+  translate: 0 -50%;
   pointer-events: none;
   z-index: 0;
 }

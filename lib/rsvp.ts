@@ -1,17 +1,15 @@
-import { invitation } from "@/data/invitation";
-import { LANGUAGE } from "@/data/translations";
-
 export type Attendance = "yes" | "no";
 
-/** Path segment appended to the configured API base. */
-const RSVP_PATH = "api/rsvp";
+/**
+ * This deployment's own route (`app/api/rsvp/route.ts`), which writes the
+ * answer to the hosts' Google Sheet with server-only credentials.
+ */
+const RSVP_ENDPOINT = "/api/rsvp";
 
 export interface RsvpPayload {
-  invitationSlug: string;
   guestName: string;
   attendance: Attendance;
   guestCount: number;
-  language: typeof LANGUAGE;
 }
 
 /**
@@ -26,21 +24,6 @@ export class RsvpError extends Error {
     super(message);
     this.name = "RsvpError";
   }
-}
-
-/**
- * Central RSVP API base. Vercel receives it as `NEXT_PUBLIC_RSVP_API_URL`; the
- * value Invitation Admin writes into `invitation.rsvp.endpoint` is only a
- * fallback for deployments configured before the variable existed.
- */
-export function rsvpEndpoint(): string | null {
-  const base = process.env.NEXT_PUBLIC_RSVP_API_URL?.trim().replace(/\/+$/, "");
-  if (base) return `${base}/${RSVP_PATH}`;
-
-  const configured: string = invitation.rsvp.endpoint;
-  const fallback = configured.trim().replace(/\/+$/, "");
-  if (!fallback) return null;
-  return fallback.endsWith(RSVP_PATH) ? fallback : `${fallback}/${RSVP_PATH}`;
 }
 
 export interface SubmitInput {
@@ -60,20 +43,15 @@ export async function submitRsvp(
   messages: RsvpMessages,
   signal?: AbortSignal,
 ): Promise<void> {
-  const endpoint = rsvpEndpoint();
-  if (!endpoint) throw new RsvpError(messages.config, "config");
-
   const payload: RsvpPayload = {
-    invitationSlug: invitation.slug,
     guestName: input.guestName.trim(),
     attendance: input.attendance,
     guestCount: input.attendance === "no" ? 0 : input.guestCount,
-    language: LANGUAGE,
   };
 
   let response: Response;
   try {
-    response = await fetch(endpoint, {
+    response = await fetch(RSVP_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
