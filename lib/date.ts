@@ -37,7 +37,7 @@ export function eventDay(date: string): number {
   return parseEventDate(date).day;
 }
 
-/** `16:00` → `16:00`, tolerating `7:5` style input. */
+/** `17:00` → `17:00`, tolerating `7:5` style input. */
 export function formatTime(startTime: string): string {
   const [hours, minutes] = startTime.split(":");
   return `${hours.padStart(2, "0")}:${(minutes ?? "00").padStart(2, "0")}`;

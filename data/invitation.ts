@@ -52,7 +52,7 @@ export const invitation: InvitationData = {
   },
   event: {
     date: "2026-11-13",
-    startTime: "16:00",
+    startTime: "17:00",
   },
   venue: {
     name: {
