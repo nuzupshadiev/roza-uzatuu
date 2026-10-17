@@ -23,6 +23,13 @@
     "eslint-config-next": "16.3.1",
     "typescript": "^5"
   },
+  "browserslist": [
+    "chrome >= 109",
+    "edge >= 109",
+    "firefox >= 102",
+    "safari >= 15",
+    "ios_saf >= 15"
+  ],
   "packageManager": "pnpm@10.11.0",
   "pnpm": {
     "onlyBuiltDependencies": [
