@@ -85,6 +85,7 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   robots: { index: false, follow: false },
+  other: { google: "notranslate" },
 };
 
 export const viewport: Viewport = {
@@ -101,8 +102,14 @@ const noScriptStyles = `
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  /**
+   * Phones set to Russian auto-translate the Kyrgyz text into Russian, which
+   * mangles it. `translate="no"` is the standard opt-out (Chrome, Safari, Edge),
+   * the `notranslate` class is the one Google Translate itself looks for, and
+   * the `google` meta tag in `metadata` stops Chrome offering to translate.
+   */
   return (
-    <html lang="ky">
+    <html lang="ky" translate="no" className="notranslate">
       <body
         className={`${serif.variable} ${script.variable} ${display.variable} ${round.variable}`}
       >
